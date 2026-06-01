@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import type { LoginFormData, UsuarioLogado } from '../types/auth.ts';
 
 export function Login() {
-  // Inicializa o estado usando a interface criada
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     senha: '',
@@ -11,7 +10,6 @@ export function Login() {
   const [erro, setErro] = useState<string | null>(null);
   const [usuario, setUsuario] = useState<UsuarioLogado | null>(null);
 
-  // Tipando o evento de mudança do Input genérico
   const lidarMudancaInput = (evento: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evento.target;
     setFormData((dadosAnteriores) => ({
@@ -20,19 +18,16 @@ export function Login() {
     }));
   };
 
-  // Tipando o evento de envio do Formulário
   const lidarEnvioFormulario = async (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault();
     setErro(null);
 
-    // Validação básica simples
     if (!formData.email || !formData.senha) {
       setErro('Por favor, preencha todos os campos.');
       return;
     }
 
     try {
-      // Simulação de requisição para API (Substitua pelo seu fetch/axios)
       if (formData.email === 'user@teste.com' && formData.senha === '123456') {
         const respostaSimulada: UsuarioLogado = {
           id: '1',
@@ -42,7 +37,7 @@ export function Login() {
         };
         
         setUsuario(respostaSimulada);
-        localStorage.setItem('token', respostaSimulada.token); // Salva a sessão
+        localStorage.setItem('token', respostaSimulada.token);
       } else {
         setErro('E-mail ou senha incorretos.');
       }
