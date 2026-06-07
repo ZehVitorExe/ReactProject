@@ -1,9 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { LoginView } from './views/auth/Login';
+import { WeatherDashboard } from './views/dash/dashboard';
 
-function Dashboard() {
-  return <h2>Dashboard em Tempo Real</h2>;
-}
 
 function Listagem() {
   return <h2> Tela de Listagem e Busca</h2>;
@@ -19,7 +17,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LoginView />} />
         
-        <Route path="/dashboard" element={<LayoutInterno><Dashboard /></LayoutInterno>} />
+        <Route path="/dashboard" element={<LayoutInterno><WeatherDashboard/></LayoutInterno>} />
         <Route path="/listagem" element={<LayoutInterno><Listagem /></LayoutInterno>} />
         <Route path="/configuracoes" element={<LayoutInterno><Configuracoes /></LayoutInterno>} />
       </Routes>
