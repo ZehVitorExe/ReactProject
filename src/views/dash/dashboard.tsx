@@ -2,20 +2,17 @@ import React from 'react';
 import { useWeather } from '../../hooks/usaClimahook';
 
 export const WeatherDashboard: React.FC = () => {
-  // Coordenadas de Berlim (exemplo do cURL)
-  const { data, loading, error } = useWeather(52.52, 13.41);
-
+  const { data, loading, error } = useWeather(-29.959, -51.707);
   if (loading) return <div style={styles.center}>Carregando dados do clima...</div>;
   if (error) return <div style={{ ...styles.center, color: '#e63946' }}>Erro: {error}</div>;
   if (!data) return null;
 
   return (
     <div style={styles.container}>
-      {/* Card Principal: Clima Atual */}
       <div style={styles.mainCard}>
         <div style={styles.header}>
           <div>
-            <h2 style={styles.title}>Berlim</h2>
+            <h2 style={styles.title}>São Jeronimo</h2>
             <p style={styles.subtitle}>Clima Atual</p>
           </div>
           <span style={styles.weatherIcon}>☀️</span>

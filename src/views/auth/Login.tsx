@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function LoginView() {
-  const navigate = useNavigate(); 
+interface LoginViewProps {
+  onLogin?: () => void;
+}
+
+export function LoginView({ onLogin }: LoginViewProps) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
@@ -12,13 +16,19 @@ export function LoginView() {
     setErro('');
 
 
-    if (email === 'admin@teste' && senha === '123456') {
-      // mock
+    if (email === 'admin@teste.com' && senha === '123456') {
+      // mock: grava token e atualiza estado do App via onLogin
+      if (onLogin) {
+        onLogin();
+      } else {
+        localStorage.setItem('@weatherApp:token', 'true');
+      }
       navigate('/dashboard');
     } else {
       setErro('E-mail ou senha incorretos! (Use: admin@teste.com / 123456)');
     }
   };
+
 
   return (
     <div style={{ maxWidth: '350px', margin: '100px auto', padding: '30px', border: '1px solid #ccc', borderRadius: '8px', fontFamily: 'sans-serif' }}>
