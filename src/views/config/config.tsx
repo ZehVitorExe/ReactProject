@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useConfig } from '../../contexts/configContext';
 import type { UserProfile } from '../../contexts/configContext';
+import { Card } from '../../components/Card';
+import { Input } from '../../components/Input';
+import { Button } from '../../components/Button';
 
 export const SettingsScreen: React.FC = () => {
   const { profile, theme, updateProfile, toggleTheme } = useConfig();
@@ -9,37 +12,53 @@ export const SettingsScreen: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
- //   setFormData({ ...profile });
+    setFormData({ ...profile });
   }, [profile]);
 
   const isDark = theme === 'dark';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value } as UserProfile));
   };
+
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const num = value === '' ? undefined : parseFloat(value);
+    setFormData((prev) => ({ ...prev, [name]: num } as UserProfile));
+  };
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMsg, setPasswordMsg] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateProfile(formData);
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
+
+    // senha apenas simbólico
+    if (newPassword) {
+      if (newPassword === confirmPassword) {
+        setPasswordMsg('✓ Senha alterada (simulado)');
+      } else {
+        setPasswordMsg('Senha nova e confirmação não conferem');
+      }
+      // limpa campos 
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => setPasswordMsg(null), 3000);
+    }
   };
 
   return (
-    <div style={{ fontFamily: '"Segoe UI", Roboto, sans-serif', maxWidth: '450px', margin: '20px auto', padding: '0 20px' }}>
-      <div style={{
-        borderRadius: '20px',
-        padding: '24px',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
-        transition: 'background-color 0.3s ease, color 0.3s ease',
-        backgroundColor: isDark ? '#161625' : '#ffffff',
-        color: isDark ? '#f7f9fc' : '#2b2d42',
-        border: isDark ? '1px solid #2d2d44' : '1px solid #e2e8f0',
-      }}>
+    <div style={{ maxWidth: '450px', margin: '20px auto', padding: '0 20px', boxSizing: 'border-box' }}>
+      <Card style={{ padding: 24 }}>
         <h2 style={{ margin: '0 0 20px 0', fontSize: '24px', fontWeight: 600 }}>Configurações</h2>
 
-        {/* Seção de Aparência */}
         <div style={{ borderTop: '1px solid rgba(141, 153, 174, 0.2)', paddingTop: '16px', marginBottom: '20px' }}>
           <h3 style={{ fontSize: '14px', margin: '0 0 16px 0', color: '#8d99ae', fontWeight: 600, textTransform: 'uppercase' }}>Aparência</h3>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px' }}>
@@ -67,86 +86,41 @@ export const SettingsScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Formulário de Perfil */}
         <form onSubmit={handleSubmit} style={{ borderTop: '1px solid rgba(141, 153, 174, 0.2)', paddingTop: '16px' }}>
           <h3 style={{ fontSize: '14px', margin: '0 0 16px 0', color: '#8d99ae', fontWeight: 600, textTransform: 'uppercase' }}>Perfil do Usuário</h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '14px' }}>
             <label style={{ fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>Nome</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              style={{
-                padding: '10px 14px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                outline: 'none',
-                backgroundColor: isDark ? '#22223b' : '#f8fafc',
-                color: isDark ? '#ffffff' : '#2b2d42',
-                border: isDark ? '1px solid #4a4a6a' : '1px solid #cbd5e1',
-              }}
-              required
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '14px' }}>
-            <label style={{ fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>E-mail</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              style={{
-                padding: '10px 14px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                outline: 'none',
-                backgroundColor: isDark ? '#22223b' : '#f8fafc',
-                color: isDark ? '#ffffff' : '#2b2d42',
-                border: isDark ? '1px solid #4a4a6a' : '1px solid #cbd5e1',
-              }}
-              required
-            />
+            <Input type="text" name="name" value={formData.name} onChange={handleChange} style={{ width: '100%' }} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px' }}>
             <label style={{ fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>Cidade Padrão</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              style={{
-                padding: '10px 14px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                outline: 'none',
-                backgroundColor: isDark ? '#22223b' : '#f8fafc',
-                color: isDark ? '#ffffff' : '#2b2d42',
-                border: isDark ? '1px solid #4a4a6a' : '1px solid #cbd5e1',
-              }}
-              required
-            />
+            <Input type="text" name="city" value={formData.city} onChange={handleChange} style={{ width: '100%' }} required />
           </div>
 
-          <button 
-            type="submit" 
-            style={{
-              width: '100%',
-              padding: '12px',
-              borderRadius: '10px',
-              border: 'none',
-              backgroundColor: '#4a90e2',
-              color: '#fff',
-              fontSize: '15px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-            }}
-          >
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>Latitude</label>
+              <Input type="number" name="lat" value={formData.lat ?? ''} onChange={handleNumberChange} step="any" style={{ width: '100%' }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>Longitude</label>
+              <Input type="number" name="lon" value={formData.lon ?? ''} onChange={handleNumberChange} step="any" style={{ width: '100%' }} />
+            </div>
+          </div>
+
+          <div style={{ borderTop: '1px solid rgba(141, 153, 174, 0.12)', paddingTop: 12, marginBottom: 12, boxSizing: 'border-box' }}>
+            <h4 style={{ margin: '8px 0', fontSize: 13, color: '#8d99ae' }}>Alterar Senha (simulado)</h4>
+            <Input type="password" placeholder="Senha atual" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+            <Input type="password" placeholder="Nova senha" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+            <Input type="password" placeholder="Confirmar nova senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+            {passwordMsg && <p style={{ margin: 0, color: passwordMsg.startsWith('✓') ? '#4ade80' : '#e63946' }}>{passwordMsg}</p>}
+          </div>
+
+          <Button type="submit" variant="primary" style={{ width: '100%', marginTop: 6 }}>
             Salvar Configurações
-          </button>
+          </Button>
 
           {isSaved && (
             <p style={{ color: '#4ade80', textAlign: 'center', fontSize: '14px', marginTop: '12px', fontWeight: 'bold' }}>
@@ -154,7 +128,7 @@ export const SettingsScreen: React.FC = () => {
             </p>
           )}
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

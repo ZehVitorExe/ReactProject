@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useConfig } from './contexts/configContext';
 import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { LoginView } from './views/auth/Login';
 import { WeatherDashboard } from './views/dash/dashboard';
 import { SettingsScreen } from './views/config/config';
+import { ListScreen } from './views/listagem/list';
+import { PokemonDetail } from './views/listagem/PokemonDetail';
+import { BinanceHidden } from './views/binance/BinanceHidden';
 
 function Listagem() {
-  return <h2>Tela de Listagem e Busca</h2>;
+  return <ListScreen />;
 }
 
 export default function App() {
@@ -50,6 +54,14 @@ export default function App() {
             </ProtectedRoute>
           } 
         />
+        <Route
+          path="/pokemon/:id"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <LayoutInterno onLogout={logout}><PokemonDetail /></LayoutInterno>
+            </ProtectedRoute>
+          }
+        />
         <Route 
           path="/configuracoes" 
           element={
@@ -60,6 +72,14 @@ export default function App() {
         />
 
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="/_binance"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <LayoutInterno onLogout={logout}><BinanceHidden /></LayoutInterno>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
@@ -86,6 +106,7 @@ interface LayoutInternoProps {
 
 function LayoutInterno({ children, onLogout }: LayoutInternoProps) {
   const navigate = useNavigate();
+  const { profile } = useConfig();
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault(); // Impede o link de disparar navegação padrão por href
@@ -96,9 +117,14 @@ function LayoutInterno({ children, onLogout }: LayoutInternoProps) {
   return (
     <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
       <aside style={{ width: '220px', backgroundColor: '#212529', color: 'white', padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <h3>Menu</h3>
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 14, opacity: 0.9 }}>Olá,</div>
+          <div style={{ fontSize: 16, fontWeight: 700 }}>{profile.name}</div>
+        </div>
+        <h3 style={{ margin: '8px 0' }}>Menu</h3>
         <Link to="/dashboard" style={estiloLink}>📊 Dashboard</Link>
         <Link to="/listagem" style={estiloLink}>🔍 Listagem</Link>
+        <Link to="/_binance" style={estiloLink}>🪙 Binance</Link>
         <Link to="/configuracoes" style={estiloLink}>⚙️ Configurações</Link>
         <hr style={{ width: '100%', borderColor: '#444' }} />
         <button onClick={handleLogout} style={estiloBotaoSair}>

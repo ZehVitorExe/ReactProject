@@ -17,7 +17,7 @@ export function LoginView({ onLogin }: LoginViewProps) {
 
 
     if (email === 'admin@teste.com' && senha === '123456') {
-      // mock: grava token e atualiza estado do App via onLogin
+      // mock
       if (onLogin) {
         onLogin();
       } else {
@@ -32,7 +32,7 @@ export function LoginView({ onLogin }: LoginViewProps) {
 
   return (
     <div style={{ maxWidth: '350px', margin: '100px auto', padding: '30px', border: '1px solid #ccc', borderRadius: '8px', fontFamily: 'sans-serif' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>🔑 Acessar Conta</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}> Acessar Conta</h2>
       
       {erro && <p style={{ color: 'red', fontSize: '14px', textAlign: 'center', fontWeight: 'bold' }}>{erro}</p>}
 
@@ -67,7 +67,7 @@ export function LoginView({ onLogin }: LoginViewProps) {
           type="submit" 
           style={{ width: '100%', padding: '12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}
         >
-          Entrar no Sistema
+          Entrar
         </button>
       </form>
     </div>

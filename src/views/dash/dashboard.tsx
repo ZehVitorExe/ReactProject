@@ -1,8 +1,13 @@
 import React from 'react';
 import { useWeather } from '../../hooks/usaClimahook';
+import { useConfig } from '../../contexts/configContext';
 
 export const WeatherDashboard: React.FC = () => {
-  const { data, loading, error } = useWeather(-29.959, -51.707);
+  const { profile } = useConfig();
+  const lat = profile.lat ?? -29.959;
+  const lon = profile.lon ?? -51.707;
+
+  const { data, loading, error } = useWeather(lat, lon);
   if (loading) return <div style={styles.center}>Carregando dados do clima...</div>;
   if (error) return <div style={{ ...styles.center, color: '#e63946' }}>Erro: {error}</div>;
   if (!data) return null;
@@ -12,7 +17,7 @@ export const WeatherDashboard: React.FC = () => {
       <div style={styles.mainCard}>
         <div style={styles.header}>
           <div>
-            <h2 style={styles.title}>São Jeronimo</h2>
+            <h2 style={styles.title}>{profile.city ?? 'Localidade'}</h2>
             <p style={styles.subtitle}>Clima Atual</p>
           </div>
           <span style={styles.weatherIcon}>☀️</span>
@@ -36,7 +41,6 @@ export const WeatherDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Seção Secundária: Previsão Horária */}
       <div style={styles.forecastContainer}>
         <h3 style={styles.sectionTitle}>Próximas Horas</h3>
         <div style={styles.hourlyScroll}>
@@ -56,7 +60,6 @@ export const WeatherDashboard: React.FC = () => {
   );
 };
 
-// Estilos rápidos inline para manter o exemplo auto-contido e limpo
 const styles: Record<string, React.CSSProperties> = {
   container: {
     fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif',

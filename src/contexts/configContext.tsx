@@ -4,6 +4,8 @@ export interface UserProfile {
   name: string;
   email: string;
   city: string;
+  lat?: number;
+  lon?: number;
 }
 
 export type AppTheme = 'light' | 'dark';
@@ -21,6 +23,8 @@ const DEFAULT_PROFILE: UserProfile = {
   name: 'Usuário',
   email: 'usuario@email.com',
   city: 'Berlim',
+  lat: -29.959,
+  lon: -51.707,
 };
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -49,9 +53,11 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (theme === 'dark') {
         root.style.backgroundColor = '#1a1a2e';
         root.style.color = '#f7f9fc';
+        root.setAttribute('data-theme', 'dark');
       } else {
         root.style.backgroundColor = '#f7f9fc';
         root.style.color = '#2b2d42';
+        root.setAttribute('data-theme', 'light');
       }
     } catch (e) {
       console.error("Falha ao salvar tema no LocalStorage", e);
