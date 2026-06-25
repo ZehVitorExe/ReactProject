@@ -8,7 +8,7 @@ export type TradeItem = {
   side: 'buy' | 'sell';
 };
 
-export function useBinance(symbol = 'btcusdt', maxItems = 100) {
+export function useBinance(symbol = 'btcusdt', maxItems = 10) {
   const [trades, setTrades] = useState<TradeItem[]>([]);
   const [status, setStatus] = useState<'idle' | 'connecting' | 'open' | 'closed' | 'error'>('idle');
   const wsRef = useRef<WebSocket | null>(null);

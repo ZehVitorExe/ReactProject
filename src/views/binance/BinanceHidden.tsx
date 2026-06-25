@@ -3,12 +3,13 @@ import { Card } from '../../components/Card';
 import useBinance from '../../hooks/useBinance';
 
 export const BinanceHidden: React.FC = () => {
-  const { trades, status } = useBinance('btcusdt', 100);
+  const moeda = 'btcusdt';
+  const { trades, status } = useBinance(moeda, 10);
 
   return (
     <div style={{ maxWidth: 900, margin: '24px auto' }}>
       <h2>Binance Live Trades (hidden)</h2>
-      <p style={{ color: '#666' }}>Rota escondida — acessível diretamente via URL <code>/_binance</code>.</p>
+      <p style={{ color: '#666' }}>MOEDA: {moeda}</p>
       <Card style={{ marginTop: 12 }}>
         <div style={{ padding: 12, color: '#666' }}>Status: {status}</div>
         <div style={{ maxHeight: 480, overflowY: 'auto' }}>
